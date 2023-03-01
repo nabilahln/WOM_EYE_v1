@@ -1,0 +1,78 @@
+﻿@model WOM_EYE.Models.Notes.NoteModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Create New Notes " + ViewBag.namaTahap;
+    ViewData["responseCode"] = Model.responseCode;
+}
+
+<!-- #region Area Response -->
+<div>
+    <div style="height:20px;width:60%;margin-left:auto">
+        @if (@Model.responseCode == "200")
+        {
+            <span class="alert-success" style="border-radius:5px; padding:3px; float:right">
+                @Model.responseMessage
+            </span>
+        }
+        else
+        {
+            if (@Model.responseCode != null && @Model.responseCode != "xx")
+            {
+                <span class="alert-danger" style="border-radius:5px; padding:3px; float:right">
+                    Update Failed : @Model.responseMessage
+                </span>
+            }
+
+        }
+    </div>
+</div>
+
+<h3>Insert Note @ViewBag.namaTahap</h3>
+
+<form id="frmInputNote" method="post" asp-controller="Note" asp-action="CreateValidation">
+    <div class="wrapFormInput">
+        <!-- Input Hidden -->
+        <input type="hidden" asp-for="DETAIL_PROJECT_ID" name="DETAIL_PROJECT_ID" id="DETAIL_PROJECT_ID" readonly />
+        <input type="hidden" asp-for="USR_CRT" name="USR_CRT" id="USR_CRT" readonly />
+
+        <!-- Input STATUS-->
+        <div class="wrapTextInput">
+            @Html.LabelFor(x => x.STATUS_ID):
+            <select id="STATUS_ID" name="STATUS_ID" class="form-control" style="border-radius:10rem;">
+                <option value=""> Select Status </option>
+                @foreach (var user in Model.ddlStatusCatatan)
+                {
+                    <option value="@user.key">@user.value</option>
+                }
+            </select>
+            <span asp-validation-for="STATUS_ID" class="text-danger" style="font-size:12px; font-style:italic; border-radius:10rem;"></span>
+        </div>
+
+        <!-- Input NOTES-->
+        <div class="wrapTextInput">
+            @Html.LabelFor(x => x.NOTES):
+            @Html.TextAreaFor(x => x.NOTES, new { @class = "form-control", @name = "NOTES", placeholder = "Input Notes", style = "border-radius:10rem;" })
+            <span asp-validation-for="NOTES" class="text-danger" style="font-size:12px; font-style:italic"></span>
+        </div>
+        <!-- Button -->
+        <br />
+        <button class="form-control bg-success btn-block" name="btnSaveProject" id="btnSaveProject" value="SaveCatatan" style="color:white; border-radius:10rem;">
+            Save
+        </button>
+    </div>
+    <br />
+    <div>
+        <form asp-controller="Note" asp-action="Index" method="post">
+            <!-- Input ID-->
+            @*<input type="hidden" name="id" id="id" value="@Model.detailProject[i].T_WOMEYE_DETAIL_PROJECT_ID" />
+                <input type="hidden" name="tahap" id="tahap" value="@Model.detailProject[i].TAHAP" />*@
+            <button class="btn btn-primary btn-sm" style="border-radius:1rem;">Back To List</button>
+        </form>
+    </div>
+</form>
+
+
+<script src="~/vendor/jquery/jquery.min.js"></script>
+

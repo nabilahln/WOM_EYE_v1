@@ -1,0 +1,116 @@
+﻿@model WOM_EYE.Models.Drop.DropModel
+
+@{
+    ViewData["Title"] = "Drop";
+    ViewData["responseCodeDrop"] = Model.responseCodeDrop;
+}
+
+<!-- #region Area Response -->
+<div>
+    <div style="height:20px;width:60%;margin-left:auto">
+        @if (@Model.responseCodeDrop == "200")
+        {
+            <span class="alert-success" style="border-radius:5px; padding:3px; float:right">
+                @Model.responseMessageDrop
+            </span>
+        }
+        else
+        {
+            if (@Model.responseCodeDrop != null && @Model.responseCodeDrop != "xx")
+            {
+                <span class="alert-danger" style="border-radius:5px; padding:3px; float:right">
+                    Update Failed : @Model.responseMessageDrop
+                </span>
+            }
+
+        }
+    </div>
+</div>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+   
+    <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+<body>
+    <h3>DATA DROP PROJECT</h3>
+    <hr />
+    <br />
+    <p>
+
+    </p>
+    <div class="card shadow mb-4">
+        <div class="card-body" style="font-size: 16px;">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>
+                            No
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.PROJECT_ID)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ALASAN)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 1; i < Model.ListDrop.Count; i++)
+                    {
+                        <tr>
+                            @*<td>@Html.DisplayFor(model => model.ListDrop[i].T_WOMEYE_DROP_ID)</td>*@
+                            <td>@i</td>
+                            <td>@Html.DisplayFor(x => x.ListDrop[i].PROJECT_ID)</td>
+                            <td>@Html.DisplayFor(x => x.ListDrop[i].ALASAN)</td>
+                            <td>
+                               
+
+                                <a class="btn btn-danger btn-sm" type="button" href="@Url.Action("Undrop", "Drop", new { dropId = @Html.ValueFor(x => x.ListDrop[i].T_WOMEYE_DROP_ID) })" onclick="return confirm('Apakah Anda yakin melakukan Undrop pada data ini?');">Undrop</a>
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+
+            </table>
+            </div>
+        </div>
+
+        <script src="vendor/jquery/jquery.min.js"></script>
+       
+
+        <!-- Page level plugins -->
+        <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+        <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="js/demo/datatables-demo.js"></script>
+        
+        <script>
+            // Get the form elements
+            var form = document.getElementById("myForm");
+            var submitBtn = document.getElementById("submitBtn");
+
+            // Listen for the button click event
+            submitBtn.addEventListener("click", function () {
+                // Get the input data
+                var result = confirm("Apakah Anda yakin untuk melakukan Undrop pada data ini?");
+
+                // Check the result of the pop-up
+                if (result == true) {
+                    alert("Data berhasil dilakukan Undrop. Silahkan cek data pada halaman project");
+                } else {
+                    alert("Data tidak dilakukan Undrop");
+                }
+            });
+
+        </script>
+</body>
+</html>
+

@@ -1,0 +1,202 @@
+﻿@model WOM_EYE.Models.Notes.NoteModel
+
+@{
+    ViewData["Title"] = "Catatan " + ViewBag.namaTahap;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["responseCode"] = Model.responseCode;
+
+    string idButtonEditNote = "";
+    List<String> listButtonEditNote = new List<String>();
+}
+
+<!-- #region Area Response -->
+<div>
+    <div style="height:20px;width:60%;margin-left:auto">
+        @if (@Model.responseCode == "200")
+        {
+            <span class="alert-success" style="border-radius:5px; padding:3px; float:right">
+                @Model.responseMessage
+            </span>
+        }
+        else
+        {
+            if (@Model.responseCode != null && @Model.responseCode != "xx")
+            {
+                <span class="alert-danger" style="border-radius:5px; padding:3px; float:right">
+                    Update Failed : @Model.responseMessage
+                </span>
+            }
+
+        }
+    </div>
+</div>
+
+<h3>Notes @ViewBag.namaTahap</h3>
+<hr />
+<head>
+
+
+    <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+</head>
+<div>
+    <form asp-controller="Note" asp-action="Create" method="post" id="btnAddNote" style="visibility:hidden">
+        <!-- Input ID-->
+        <input type="hidden" name="id" id="id" value="@ViewBag.detailProjectId" />
+        <button class="btn btn-success btn-icon-split">
+            <span class="icon text-white-50">
+                <i class="fas fa-solid fa-plus"></i>
+            </span>
+            <span class="text">Tambah</span>
+        </button>
+    </form>
+</div>
+<br />
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <table class="table table-bordered" id="dataTable">
+            <thead>
+                <tr>
+                    <th>NO </th>
+                    <th>NAMA USER</th>
+                    <th>STATUS</th>
+                    <th>CATATAN</th>
+                    <th>DATE CREATE</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 1; i < Model.ListCatatan.Count; i++)
+                {
+                    idButtonEditNote = "buttonEditId" + Model.ListCatatan[i].M_WOMEYE_CATATAN_ID;
+                    listButtonEditNote.Add(idButtonEditNote);
+
+                    <tr>
+                        @*<td>@Html.DisplayFor(model => model.ListProject[i].T_WOMEYE_PROJECT_ID)</td>*@
+                        <td>@i</td>
+                        <td>@Html.DisplayFor(model => model.ListCatatan[i].USR_CRT)</td>
+                        <td>@Html.DisplayFor(model => model.ListCatatan[i].STATUS_ID)</td>
+                        <td>@Html.DisplayFor(model => model.ListCatatan[i].NOTES)</td>
+                        <td>@Html.DisplayFor(model => model.ListCatatan[i].DTM_CRT)</td>
+                        <td>
+                            <form asp-controller="Note" asp-action="Edit" method="post" id="@idButtonEditNote">
+                                <input type="hidden" name="id" id="id" value="@Html.DisplayFor(model => model.ListCatatan[i].M_WOMEYE_CATATAN_ID)" style="border-image-width:auto" />
+                                <button class="btn btn-warning btn-sm "><i class="fa fa-edit"></i>Edit</button>
+                            </form>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" asp-controller="Project" style="margin-top:30px; margin-bottom:10px;">Back to List</a>
+</div>
+
+<script src="vendor/jquery/jquery.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="js/demo/datatables-demo.js"></script>
+
+<script>
+    var accessAdd = false;
+    var accessEdit = false;
+
+    var sol_leader = '@ViewBag.project.SOL_LEADER';
+    var project_leader = '@ViewBag.project.PROJECT_LEADER';
+    var userLogin = '@ViewBag.UserLogin';
+    var listNote = [[]];
+    var listProgrammer = [];
+    var listFA = []
+    var listButton = [];
+    var loop = 1;
+
+    @for(int i = 1; i < Model.ListCatatan.Count; i++)
+			{
+        @:listNote.push([]);
+    @:console.log('@Model.ListCatatan[i].USR_CRT');
+
+			}
+
+    @for(int i = 1; i < Model.ListCatatan.Count; i++)
+			{
+        @:listNote['@i'].push('buttonEditId'+'@Model.ListCatatan[i].M_WOMEYE_CATATAN_ID');
+        @:listNote['@i'].push('@Model.ListCatatan[i].USR_CRT');
+
+			}
+
+    @foreach(var programmer in ViewBag.listProgrammer)
+        {
+            @:listProgrammer.push('@programmer');
+        }
+
+    @foreach(var fa in ViewBag.listFA)
+        {
+            @:listFA.push('@fa');
+        }
+
+    @foreach(var button in listButtonEditNote)
+        {
+            @:listButton.push('@button');
+        }
+
+    if (userLogin == sol_leader) {
+        accessAdd = true;
+    }
+    else if (userLogin == project_leader) {
+        accessAdd = true;
+    }
+    else {
+        for (let i = 0; i < listProgrammer.length; i++) {
+            console.log(listProgrammer[i]);
+            if (userLogin == listProgrammer[i]) {
+                accessAdd = true;
+            }
+        }
+
+        for (let j = 0; j < listFA.length; j++) {
+            console.log(listFA[j]);
+            if (userLogin == listFA[j]) {
+                accessAdd    = true;
+            }
+        }
+    }
+
+    for (let i = 1; i < '@Model.ListCatatan.Count'; i++) {
+        console.log(listNote[i][0]);
+        if (userLogin == listNote[i][1]) {
+            document.getElementById(listNote[i][0]).style.visibility = 'visible';
+            console.log('Button set visible' + listNote[i][0]);
+
+        } else {
+            console.log('Button set hidden' + listNote[i][0]);
+            document.getElementById(listNote[i][0]).style.visibility = 'hidden';
+        }
+    }
+
+    if (accessAdd == false) {
+        document.getElementById('btnAddNote').style.visibility = 'hidden';
+    } else {
+        document.getElementById('btnAddNote').style.visibility = 'visible';
+
+    }
+
+    console.log(listNote[1]);
+    console.log(listProgrammer);
+    console.log(listFA);
+    console.log(listButton);
+    console.log(project_leader);
+    console.log(sol_leader);
+    console.log(userLogin);
+
+    console.log('Access of ' + userLogin + ' is ' + accessAdd);
+
+</script>

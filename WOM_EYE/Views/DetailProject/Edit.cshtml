@@ -1,0 +1,183 @@
+﻿@model WOM_EYE.Models.Projects.DetailProjectModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["responseCodeProject"] = Model.responseCodeProject;
+}
+
+<!-- #region Area Response -->
+<div>
+    <div style="height:20px;width:60%;margin-left:auto">
+        @if (@Model.responseCodeProject == "200")
+        {
+            <span class="alert-success" style="border-radius:5px; padding:3px; float:right">
+                @Model.responseMessageProject
+            </span>
+        }
+        else
+        {
+            if (@Model.responseCodeProject != null && @Model.responseCodeProject != "xx")
+            {
+                <span class="alert-danger" style="border-radius:5px; padding:3px; float:right">
+                    Update Failed : @Model.responseMessageProject
+                </span>
+            }
+
+        }
+    </div>
+</div>
+
+<h3>EDIT DETAIL PROJECT</h3>
+
+<form id="frmEditDetailProject" method="post" asp-controller="DetailProject" asp-action="Edit">
+    <div class="wrapFormInput">
+
+        <!-- T_WOMEYE_DETAIL_PROJECT_ID -->
+        <div class="wrapTextInput">
+            @Html.HiddenFor(x => x.T_WOMEYE_DETAIL_PROJECT_ID)
+            @Html.HiddenFor(x => x.T_WOMEYE_DETAIL_PROJECT_ID, new { @class = "form-control form-control-user", @name = "T_WOMEYE_DETAIL_PROJECT_ID", style = "border-radius:10rem;" })
+        </div>
+
+        <!-- TAHAP -->
+        <div class="wrapTextInput">
+            @Html.LabelFor(x => x.TAHAP);
+            @Html.TextBoxFor(x => x.TAHAP, new { @class = "form-control form-control-user", @name = "TAHAP", placeholder = "Tahap", @readonly = "readonly", style = "border-radius:10rem;" })
+            <span asp-validation-for="TAHAP" class="text-danger" style="font-size:12px; font-style:italic"></span>
+        </div>
+
+        <!-- DOKUMEN -->
+        <div class="wrapTextInput">
+            @Html.LabelFor(x => x.DOKUMEN):
+            @Html.TextBoxFor(x => x.DOKUMEN, new { @class = "form-control form-control-user", @name = "DOKUMEN", placeholder = "drive.google.com/example", style = "border-radius:10rem;" })
+            <span asp-validation-for="DOKUMEN" class="text-danger" style="font-size:12px; font-style:italic"></span>
+        </div>
+
+        <!-- START_DT  -->
+        <div class="wrapTextInput">
+            @Html.LabelFor(x => x.START_DT):
+            @if (Model.START_DT != null)
+            {
+                @Html.TextBoxFor(x => x.START_DT, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-user", type = "date", @readonly = "readonly", style = "border-radius:10rem;" })
+            }
+            else
+            {
+                @Html.TextBoxFor(x => x.START_DT, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-user", type = "date", style = "border-radius:10rem;" })
+            }
+
+            <span asp-validation-for="START_DT" class="text-danger" style="font-size:12px; font-style:italic"></span>
+        </div>
+
+        <!-- END_DT  -->
+        <div class="wrapTextInput">
+            @Html.LabelFor(x => x.END_DT):
+            @if (Model.START_DT != null)
+            {
+                @Html.TextBoxFor(x => x.END_DT, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-user", type = "date", @readonly = "readonly", style = "border-radius:10rem;" })
+            }
+            else
+            {
+                @Html.TextBoxFor(x => x.END_DT, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-user", type = "date", style = "border-radius:10rem;" })
+            }
+            <span asp-validation-for="END_DT" class="text-danger" style="font-size:12px; font-style:italic"></span>
+        </div>
+
+        <!-- REALIZE_START_DT-->
+        <div class="wrapTextInput">
+            @Html.LabelFor(x => x.REALIZATION_START_DT):
+            @if (Model.REALIZATION_START_DT != null)
+            {
+                @Html.TextBoxFor(x => x.REALIZATION_START_DT, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-user", type = "date", @readonly = "readonly", style = "border-radius:10rem;" })
+            }
+            else
+            {
+                @Html.TextBoxFor(x => x.REALIZATION_START_DT, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-user", type = "date", style = "border-radius:10rem;" })
+            }
+            <span asp-validation-for="REALIZATION_START_DT" class="text-danger" style="font-size:12px; font-style:italic"></span>
+        </div>
+
+        <!-- REALIZE_END_DT-->
+        <div class="wrapTextInput">
+            @Html.LabelFor(x => x.REALIZATION_END_DT):
+            @if (Model.REALIZATION_END_DT != null)
+            {
+                @Html.TextBoxFor(x => x.REALIZATION_END_DT, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-user", type = "date", @readonly = "readonly", style = "border-radius:10rem;" })
+            }
+            else
+            {
+                @Html.TextBoxFor(x => x.REALIZATION_END_DT, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-user", type = "date", style = "border-radius:10rem;" })
+            }
+            <span asp-validation-for="REALIZATION_END_DT" class="text-danger" style="font-size:12px; font-style:italic"></span>
+        </div>
+        <!-- STATUS -->
+        <div class="wrapTextInput">
+            @Html.LabelFor(x => x.STATUS_PROJECT);
+            <select asp-for="STATUS_PROJECT" id="STATUS_PROJECT" name="STATUS_PROJECT" class="form-control" style="border-radius:10rem;">
+                <option value=""> Select Status </option>
+                @foreach (var status in Model.ddlStatus)
+                {
+                    @if (status.detailFor == Model.TAHAP || status.value == "Done")
+                    {
+
+                        @if (status.key == Model.STATUS_PROJECT)
+                        {
+                            <option value="@status.key" selected>@status.value</option>
+                        }
+                        else
+                        {
+                            <option value="@status.key">@status.value</option>
+                        }
+
+
+
+                    }
+                    else { continue; }
+                }
+                }
+            </select>
+            <span asp-validation-for="STATUS_PROJECT" class="text-danger" style="font-size:12px; font-style:italic"></span>
+        </div>
+
+        <!-- CATATAN -->
+        <div class="form-group">
+            <label id="labelCatatan" class="control-label" style="display:none;" asp-for="CATATAN">Catatan :</label>
+            <input type="text" id="inputCatatan" class="form-control" style="border-radius: 10rem; display: none;" asp-for="CATATAN" />
+            <span class="text-danger" asp-validation-for="CATATAN"></span>
+        </div>
+
+        <!-- KETERANGAN -->
+        <div class="wrapTextInput">
+            @Html.LabelFor(x => x.KETERANGAN):
+            @Html.TextBoxFor(x => x.KETERANGAN, new { @class = "form-control form-control-user", @name = "KETERANGAN", placeholder = "Input keterangan", style = "border-radius:10rem;" })
+            <span asp-validation-for="KETERANGAN" class="text-danger" style="font-size:12px; font-style:italic"></span>
+        </div>
+
+        <br />
+        <!-- Button -->
+        <button class="form-control bg-success" name="btnUpdateDetailProject" id="btnUpdateDetailProject" value="UpdateDetailProject " style="color:white; border-radius:10rem;">
+            Update
+        </button>
+
+    </div>
+</form>
+
+
+<script src="~/vendor/jquery/jquery.min.js"></script>
+<script>
+    var selectField = document.getElementById("STATUS_PROJECT");
+    var hiddenInput = document.getElementById("inputCatatan");
+    var hiddenLabel = document.getElementById("labelCatatan");
+
+    selectField.addEventListener("change", function () {
+        if (selectField.value === "8" || selectField.value === "9" || selectField.value === "10" || selectField.value === "11" || selectField.value === "12" ) {
+            hiddenInput.style.display = "block";
+            hiddenLabel.style.display = "block";
+        } else {
+            hiddenInput.style.display = "none";
+            hiddenLabel.style.display = "none";
+        }
+    });
+
+</script>
+

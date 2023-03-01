@@ -1,0 +1,307 @@
+﻿@using WOM_EYE.Models.Projects
+@model dynamic
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Detail Project " + Model.project.NO_PROJECT;
+    string idButtonDetail = "";
+    List<string> listButtonName = new List<String>();
+}
+
+<!-- #region Area Response -->
+<div>
+    <div style="height:20px;width:60%;margin-left:auto">
+        @if (@Model.responseCodeProgress == "200")
+        {
+            <span class="alert-success" style="border-radius:5px; padding:3px; float:right">
+                @Model.responseMessageProgress
+            </span>
+        }
+
+        @if (@Model.responseCodeNote == "200")
+        {
+            <span class="alert-success" style="border-radius:5px; padding:3px; float:right">
+                @Model.responseMessageNote
+            </span>
+        }
+    </div>
+</div>
+<head>
+    <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+<h3><center>DETAIL PROJECT</center></h3>
+<hr />
+<div class="card shadow mb-4">
+
+    <div class="card-body">
+        <div>
+            <label style="font-size:16px;">Project Leader: </label>
+            <label style="font-size:16px;">@Model.project.PROJECT_LEADER</label>
+        </div>
+        <div>
+            <label style="font-size:16px;">Sol Leader: </label>
+            <label style="font-size:16px;">@Model.project.SOL_LEADER</label>
+        </div>
+        <div>
+            <label style="font-size:16px;">No Project: </label>
+            <label style="font-size:16px;">@Model.project.NO_PROJECT</label>
+        </div>
+    </div>
+</div>
+
+<!-- Tabel Detail Project -->
+<div class="card shadow mb-4">
+    <div class="card-body" style="font-size: 16px;">
+        <div class="table-responsive">
+
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead style="text-align: center;">
+                    <tr>
+                        <th scope="col">NO</th>
+                        <th scope="col">TAHAP</th>
+                        <th scope="col">START DATE</th>
+                        <th scope="col">END DATE</th>
+                        <th scope="col">REALIZE START DATE</th>
+                        <th scope="col">REALIZE END DATE</th>
+                        <th scope="col">G-SUITE LINK</th>
+                        <th scope="col">STATUS</th>
+                        <th scope="col">KETERANGAN</th>
+                        <th scope="col" style="white-space: nowrap; padding: 15px 50px 15px 50px;">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @for (int i = 1; i < Model.detailProject.Count; i++)
+                    {
+                        if (@Model.detailProject[i].TAHAP == "FSD")
+                        {
+                            idButtonDetail = "btnEditDetailFSD";
+                            listButtonName.Add(idButtonDetail);
+                        }
+                        
+                        if (@Model.detailProject[i].TAHAP == "DEV")
+                        {
+                            idButtonDetail = "btnEditDetailDEV";
+                            listButtonName.Add(idButtonDetail);
+                        }
+                        
+                        if (@Model.detailProject[i].TAHAP == "SIT")
+                        {
+                            idButtonDetail = "btnEditDetailSIT";
+                            listButtonName.Add(idButtonDetail);
+                        }
+                        
+                        if (@Model.detailProject[i].TAHAP == "FIT")
+                        {
+                            idButtonDetail = "btnEditDetailFIT";
+                            listButtonName.Add(idButtonDetail);
+                        }
+                        
+                        if (@Model.detailProject[i].TAHAP == "UAT")
+                        {
+                            idButtonDetail = "btnEditDetailUAT";
+                            listButtonName.Add(idButtonDetail);
+                        }
+
+
+
+                    <tr>
+                        <td>@i</td>
+                        <td>@Model.detailProject[i].TAHAP</td>
+                        <td>@Model.detailProject[i].START_DT</td>
+                        <td>@Model.detailProject[i].END_DT</td>
+                        <td>@Model.detailProject[i].REALIZATION_END_DT</td>
+                        <td>@Model.detailProject[i].REALIZATION_END_DT</td>
+                        <td>@Model.detailProject[i].DOKUMEN</td>
+                        <td>@Model.detailProject[i].STATUS_PROJECT</td>
+                        <td>@Model.detailProject[i].KETERANGAN</td>
+
+                        <td>
+
+                            <form asp-controller="DetailProject" asp-action="Edit" method="get" id="@idButtonDetail" style="visibility:hidden">
+                                <!-- Input ID-->
+                                <input type="hidden" name="id" id="id" value="@Model.detailProject[i].T_WOMEYE_DETAIL_PROJECT_ID" />
+                                <button class="btn btn-warning btn-sm" style="float:left;"><i class="fa fa-edit"></i>Edit</button>
+                            </form>
+
+
+                            <form asp-controller="Note" asp-action="Index" method="post">
+                                <!-- Input ID-->
+                                <input type="hidden" name="id" id="id" value="@Model.detailProject[i].T_WOMEYE_DETAIL_PROJECT_ID" />
+                                <input type="hidden" name="tahap" id="tahap" value="@Model.detailProject[i].TAHAP" />
+                                <button class="btn btn-success btn-sm" style="float:right;"><i class="fa fa-envelope"></i>Note</button>
+                            </form>
+                        </td>
+
+                    </tr>
+                    }
+                </tbody>
+
+            </table>
+
+
+
+        </div>
+    </div>
+</div>
+
+<br />
+<br />
+<!-- Tabel Progress -->
+<div class="card shadow mb-4">
+    <div class="card-body" style="font-size: 16px;">
+        <div class="table-responsive">
+            <h3><center>PROGRESS PROJECT</center></h3><hr />
+            <form asp-controller="Progress" asp-action="Create" method="post" style="margin-top: 20px;">
+                <!-- Input Hidden -->
+                <input type="hidden" name="noProject" id="noProject" value="@Model.project.T_WOMEYE_PROJECT_ID" />
+                <button class="btn btn-success btn-icon-split">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-solid fa-plus"></i>
+                    </span>
+                    <span class="text">Tambah</span>
+                </button>
+            </form>
+
+            <br />
+            <br />
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead style="text-align: center;">
+                    <tr>
+                        <th>No</th>
+                        <th>PROJECT  </th>
+                        <th style="white-space: nowrap;">PENANGGUNG JAWAB   </th>
+                        <th style="white-space: nowrap;">DESKRIPSI  </th>
+                        <th style="white-space: nowrap;">USER CREATE </th>
+                        <th style="white-space: nowrap;">DATE CREATE  </th>
+                        <th style="white-space: nowrap;">USER UPDATE    </th>
+                        <th style="white-space: nowrap;">DATE UPDATE   </th>
+                        <th>ACTION</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @for (int i = 1; i < Model.progress.Count; i++)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            @*<td> @Html.DisplayFor(model => model.progress[i].T_WOMEYE_PROGRESS_ID) </td>*@
+                            <td> @Model.progress[i].PROJECT_ID</td>
+                            <td> @Model.progress[i].PENANGGUNG_JAWAB</td>
+                            <td> @Model.progress[i].DESKRIPSI</td>
+                            <td> @Model.progress[i].USR_CRT</td>
+                            <td> @Model.progress[i].DTM_CRT</td>
+                            <td> @Model.progress[i].USR_UPD</td>
+                            <td> @Model.progress[i].DTM_UPD</td>
+
+
+                            <td>
+                                <form asp-controller="Progress" asp-action="Edit" method="post">
+                                    <!-- Input ID-->
+                                    <input type="hidden" name="id" id="id" value="@Model.progress[i].T_WOMEYE_PROGRESS_ID" />
+                                    <button class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> </button>
+                                    <a class="btn btn-danger btn-sm" type="button" href="#" onclick="deleteProgress(@Model.progress[i].T_WOMEYE_PROGRESS_ID)" id="id" name="id" style="display:inline-block"><i class="fa fa-trash"></i></a>
+                                </form>
+                            </td>
+
+
+                        </tr>
+
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+
+
+</div>
+
+<script src="~/vendor/jquery/jquery.min.js"></script>
+
+
+<!-- Page level plugins -->
+<script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="~/js/demo/datatables-demo.js"></script>
+
+
+<script>
+
+    window.onload = function () {
+
+        var access = false;
+
+        var sol_leader = '@Model.project.SOL_LEADER';
+        var project_leader = '@Model.project.PROJECT_LEADER';
+        var userLogin = '@ViewBag.MUserName';
+        var listProgrammer = [];
+        var listFA = []
+        var listButton = [];
+
+        console.log('User Login is: ' + userLogin);
+
+        @foreach(var programmer in Model.listProgrammer)
+        {
+            @:listProgrammer.push('@programmer');
+        }
+
+        @foreach(var fa in Model.listFA)
+        {
+            @:listFA.push('@fa');
+        }
+
+        @foreach(var button in listButtonName)
+        {
+            @:listButton.push('@button');
+        }
+
+
+        var countProgrammer = listProgrammer.length;
+        var countFA = listFA.length;
+
+        if (userLogin == sol_leader ) {
+            access = true;
+        }
+        else if (userLogin == project_leader) {
+            access = true;
+        }
+        else {
+            for (let i = 0; i < countProgrammer; i++) {
+                console.log(listProgrammer[i]);
+                if (userLogin == listProgrammer[i]) {
+                    access = true;
+                }
+            }
+
+            for (let j = 0; j < countFA; j++) {
+                console.log(listFA[j]);
+                if (userLogin == listFA[j]) {
+                    access = true;
+                }
+            }
+
+        }
+
+        if (access == false) {
+            for (let i = 0; i < listButton.length; i++) {
+                console.log(listButton[i]);
+                document.getElementById(listButton[i]).style.visibility = 'hidden';
+            }
+        } else {
+            for (let i = 0; i < listButton.length; i++) {
+                console.log(listButton[i]);
+                document.getElementById(listButton[i]).style.visibility = 'visible';
+            }
+        }
+
+        console.log('Access of ' + userLogin + ' is ' + access);
+    }
+
+</script>

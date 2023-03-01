@@ -1,0 +1,112 @@
+﻿@model WOM_EYE.Models.AddUser.AddUserModel
+@{
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Add User";
+}
+
+<div>
+    <div style="height:20px;width:60%;margin-left:auto">
+        @if (@Model.responseCodeAddUser == "200")
+        {
+            <span class="alert-success" style="border-radius:5px; padding:3px; float:right">
+                @Model.responseMessageAddUser
+            </span>
+        }
+        else
+        {
+            if (@Model.responseCodeAddUser != null && @Model.responseCodeAddUser != "xx")
+            {
+                <span class="alert-danger" style="border-radius:5px; padding:3px; float:right">
+                    Update Failed : @Model.responseMessageAddUser
+                </span>
+            }
+
+        }
+    </div>
+</div>
+
+<h3>Data User</h3>
+<hr />
+<head>
+
+
+    <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+</head>
+<div>
+    <a type="button" class="btn btn-success btn-icon-split " style="margin:20px;" asp-area="" asp-controller="AddUser" asp-action="Create">
+        <span class="icon text-white-50">
+            <i class="fas fa-solid fa-plus"></i>
+        </span>
+
+        <span class="text">Tambah</span>
+    </a>
+</div>
+<br />
+
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable">
+                <thead>
+                    <tr>
+                        <th>NO </th>
+                        <th>USERNAME</th>
+                        <th>NAMA</th>
+                        <th>NIK EMPLOYEE</th>
+                        <th>NIK KTP</th>
+                        <th>ROLE</th>
+                        @*<th>PASSWORD</th>*@
+                        <th>DIVISION</th>
+                        <th>PHONE</th>
+                        <th>GENDER</th>
+                        <th>BOD</th>
+                        @*<th>LAST USER LOGIN</th>
+                            <th>LAST USER UPDATE</th>*@
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 1; i < Model.listAddUser.Count; i++)
+                    {
+                        //idButtonEditNote = "buttonEditId" + Model.ListCatatan[i].M_WOMEYE_CATATAN_ID;
+                        //listButtonEditNote.Add(idButtonEditNote);
+
+                        <tr>
+                            @*<td>@Html.DisplayFor(model => model.ListProject[i].T_WOMEYE_PROJECT_ID)</td>*@
+                            <td>@i</td>
+                            <td>@Html.DisplayFor(model => model.listAddUser[i].USER_ID)</td>
+                            <td>@Html.DisplayFor(model => model.listAddUser[i].USER_NAME)</td>
+                            <td>@Html.DisplayFor(model => model.listAddUser[i].USER_NIK_EMP)</td>
+                            <td>@Html.DisplayFor(model => model.listAddUser[i].USER_NIK_KTP)</td>
+                            <td>@Html.DisplayFor(model => model.listAddUser[i].USER_POSITION)</td>
+                            @*<td>@Html.DisplayFor(model => model.listAddUser[i].USER_PASS)</td>*@
+                            <td>@Html.DisplayFor(model => model.listAddUser[i].DIVISION)</td>
+                            <td>@Html.DisplayFor(model => model.listAddUser[i].PHONE)</td>
+                            <td>@Html.DisplayFor(model => model.listAddUser[i].GENDER)</td>
+                            <td>@Html.DisplayFor(model => model.listAddUser[i].BOD)</td>
+                            <td>
+                                <form asp-controller="AddUser" asp-action="Update" method="get">
+                                    <!-- Input ID-->
+                                    <input type="hidden" name="id" id="id" value="@Html.DisplayFor(model => model.listAddUser[i].M_WOMEYE_USER_ID)" />
+                                    <button class="btn btn-warning" style="float:right;"><i class="fa fa-edit"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script src="vendor/jquery/jquery.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="js/demo/datatables-demo.js"></script>

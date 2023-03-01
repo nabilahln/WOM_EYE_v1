@@ -1,0 +1,75 @@
+﻿@model WOM_EYE.Models.Progress.ProgressModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["responseCodeProgress"] = Model.responseCodeProgress;
+}
+
+<!-- #region Area Response -->
+<div>
+    <div style="height:20px;width:60%;margin-left:auto">
+        @if (@Model.responseCodeProgress == "200")
+        {
+            <span class="alert-success" style="border-radius:5px; padding:3px; float:right">
+                @Model.responseMessageProgress
+            </span>
+        }
+        else
+        {
+            if (@Model.responseCodeProgress != null && @Model.responseCodeProgress != "xx")
+            {
+                <span class="alert-danger" style="border-radius:5px; padding:3px; float:right">
+                    Update Failed : @Model.responseMessageProgress
+                </span>
+            }
+
+        }
+    </div>
+</div>
+
+<h3>EDIT DATA PROGRESS</h3>
+<hr />
+<div class="row">
+    <div class="col-lg-12">
+        <form asp-action="EditValidation" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Input Hidden -->
+            <div class="form-group">
+                <input asp-for="T_WOMEYE_PROGRESS_ID" class="form-control" type="hidden" />
+                <input asp-for="USR_UPD" class="form-control" type="hidden" />
+                <input asp-for="PROJECT_ID" class="form-control" type="hidden" />
+            </div>
+
+            <!-- Penanggung Jawab -->
+            <div class="form-group">
+                <label asp-for="PENANGGUNG_JAWAB" class="control-label"></label>
+                <input asp-for="PENANGGUNG_JAWAB" style="border-radius:10rem;" class="form-control" readonly />
+                <span asp-validation-for="PENANGGUNG_JAWAB" class="text-danger"></span>
+            </div>
+
+            <!-- Deskripsi -->
+            <div class="form-group">
+                <label asp-for="DESKRIPSI" class="control-label"></label>
+                <input asp-for="DESKRIPSI" class="form-control" style="border-radius:10rem;" />
+                <span asp-validation-for="DESKRIPSI" class="text-danger"></span>
+            </div>
+
+            <!-- Button -->
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary btn-block" style="border-radius:10rem;" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script src="~/vendor/jquery/jquery.min.js"></script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,475 @@
+﻿@model WOM_EYE.Models.Projects.ProjectModel
+@{
+    ViewData["Title"] = "Project";
+
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+</head>
+<div>
+    <div style="height:20px;width:60%;margin-left:auto">
+        @if (@Model.responseCodeProject == "200")
+        {
+            <span class="alert-success" style="border-radius:5px; padding:3px; float:right">
+                @Model.responseMessageProject
+            </span>
+        }
+        else
+        {
+            if (@Model.responseCodeProject != null && @Model.responseCodeProject != "xx")
+            {
+                <span class="alert-danger" style="border-radius:5px; padding:3px; float:right">
+                    Save Failed : @Model.responseMessageProject
+                </span>
+            }
+
+        }
+    </div>
+
+
+</div>
+
+<body>
+    <center>
+
+        <h1> DATA PROJECT</h1>
+    </center>
+    <br />
+
+    <!--#REGION FORM SEARCH SOL LEADER, NO PROJECT, STATUS-->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Filter Data By :</h6>
+        </div>
+        <div class="card-body">
+            @*<div class="table-responsive">*@
+            <table class="table" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <td>
+                        <td>
+                            <p style="font-size:15px;">Sol Leader :</p>
+                        </td>
+                        <td>
+                            <form class="col-md-9">
+                                <div class="input-group">
+                                    <select asp-for="SOL_LEADER" id="myInputSol" name="SOL_LEADER" class="form-control bg-light border-0 small" aria-label="Search" aria-describedby="basic-addon2">
+                                        <option value=""> Select Sol Leader </option>
+                                        @foreach (var user in Model.ddlUser)
+                                            if (user.role == "P001")
+                                            {
+                                                <option value="@user.value">@user.value</option>
+                                            }
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button">
+                                            <i class="fas fa-search fa-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+
+                        <td>
+                        <td style="width:150px;">
+                            <p style="font-size:15px;">Project Owner :</p>
+                        </td>
+                        <td>
+                            <form class="col-md-9">
+                                <div class="input-group">
+                                    <select asp-for="PROJECT_LEADER" id="myInputProject" name="PROJECT_LEADER" class="form-control bg-light border-0 small" aria-label="Search" aria-describedby="basic-addon2">
+                                        <option value=""> Select Project Owner </option>
+                                        @foreach (var user in Model.ddlUser)
+                                            if (user.role == "P001")
+                                            {
+                                                <option value="@user.value">@user.value</option>
+                                            }
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button">
+                                            <i class="fas fa-search fa-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                        <td style="width:150px;">
+                            <p style="font-size:15px;">Function Analyst :</p>
+                        </td>
+                        <td>
+                            <form class="col-md-9">
+                                <div class="input-group">
+                                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search Function Analyst"
+                                           aria-label="Search" aria-describedby="basic-addon2" id="myInputFA" onkeyup="myFunction5()">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button">
+                                            <i class="fas fa-search fa-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+
+
+                        <td>
+                        <td>
+                            <p style="font-size:15px;">Programmer :</p>
+                        </td>
+                        <td>
+                            <form class="col-md-9">
+                                <div class="input-group">
+                                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search Programmer"
+                                           aria-label="Search" aria-describedby="basic-addon2" id="myInputProg" onkeyup="myFunction4()">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button">
+                                            <i class="fas fa-search fa-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                        <td>
+                            <p style="font-size:15px;">No Project : </p>
+                        </td>
+                        <td>
+                            <form class="col-md-9">
+                                <div class="input-group">
+                                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search No Project"
+                                           aria-label="Search" aria-describedby="basic-addon2" id="myInputNo" onkeyup="myFunction2()">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button">
+                                            <i class="fas fa-search fa-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+
+
+                        <td>
+                        <td>
+                            <p style="font-size:15px;">Status   :</p>
+                        </td>
+                        <td>
+                            <form class="col-md-9">
+                                <div class="input-group">
+                                    <select class="form-control bg-light border-0 small" id="myInputStatus" aria-label="Search" aria-describedby="basic-addon2">
+                                        <option value=""> Select Status</option>
+                                        @foreach (var user in Model.ddlStatus)
+                                        {
+
+                                            <option value="@user.value">@user.value</option>
+
+                                        }
+                                    </select>
+
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button" id="search-button" asp-controller="Project" asp-action="getSearchStatus">
+                                            <i class="fas fa-search fa-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+
+                    </tr>
+
+            </table>
+            @*</div>*@
+        </div>
+    </div>
+
+
+    <!--END REGION-->
+
+    <br />
+    <br />
+    @if (ViewBag.UserLogin.USER_POSITION == "Project Leader" || ViewBag.UserLogin.USER_POSITION == "Sol Leader")
+    {
+        <a type="button" class="btn btn-success btn-icon-split " style="margin:20px;" asp-area="" asp-controller="Project" asp-action="Create">
+            <span class="icon text-white-50">
+                <i class="fas fa-solid fa-plus"></i>
+            </span>
+
+            <span class="text">Tambah</span>
+        </a>
+    }
+
+    <br />
+
+
+    <div class="card shadow mb-4">
+        <div class="card-body" style="font-size: 16px; ">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead style="text-align: center; ">
+                        <tr>
+                            <th scope="col">NO              </th>
+                            <th scope="col" style="white-space: nowrap;">SOL LEADER      </th>
+                            <th scope="col" style="white-space: nowrap;">PROJECT OWNER  </th>
+                            <th scope="col" style="white-space: nowrap;">NO PROJECT      </th>
+                            <th scope="col">DESKRIPSI       </th>
+                            <th scope="col" style="white-space: nowrap;">FUNCTION ANALYST</th>
+                            <th scope="col">PROGRAMMER      </th>
+                            <th scope="col">STATUS          </th>
+                            <th scope="col">CATATAN         </th>
+                            <th scope="col" style="white-space: nowrap;">DATE CREATE     </th>
+                            <th scope="col" style="white-space: nowrap; padding: 15px 30px 15px 30px;">ACTION        </th>
+                        </tr>
+                    </thead>
+                    <tbody id="myFilter">
+
+
+                        @for (int i = 1; i < Model.ListProject.Count; i++)
+                        {
+                            <tr>
+
+                                <td>@i</td>
+                                <td>@Html.DisplayFor(model => model.ListProject[i].SOL_LEADER)</td>
+                                <td>@Html.DisplayFor(model => model.ListProject[i].PROJECT_LEADER)</td>
+                                <td>@Html.DisplayFor(model => model.ListProject[i].NO_PROJECT)</td>
+                                <td>@Html.DisplayFor(model => model.ListProject[i].DESKRIPSI)</td>
+                                <td>@Html.DisplayFor(model => model.ListProject[i].FUNCTION_ANALYST)</td>
+                                <td>@Html.DisplayFor(model => model.ListProject[i].PROGRAMMER)</td>
+                                <td>@Html.DisplayFor(model => model.ListProject[i].STATUS)</td>
+                                <td>@Html.DisplayFor(model => model.ListProject[i].CATATAN)</td>
+                                <td>@Html.DisplayFor(model => model.ListProject[i].DTM_CRT)</td>
+
+                                <td>
+
+                                    <!-- Detail -->
+                                    <a class="btn btn-info " onclick="detailProject(@Html.DisplayFor(model => model.ListProject[i].T_WOMEYE_PROJECT_ID))" href="Project/Detail/@Html.DisplayFor(model => model.ListProject[i].T_WOMEYE_PROJECT_ID)" style="float:left;"><i class="fa fa-eye" aria-hidden="true"></i></a>
+
+                                    @{
+
+                                        var sol_leader = Model.ListProject[i].SOL_LEADER;
+                                        var project_leader = Model.ListProject[i].PROJECT_LEADER;
+
+                                    }
+
+
+                                    @if (sol_leader.Equals(ViewBag.MUserName) || project_leader.Equals(ViewBag.MUserName))
+                                    {
+                                        <form asp-controller="Project" asp-action="Edit" method="post">
+                                            <!-- Input ID-->
+                                            <input type="hidden" name="id" id="id" value="@Html.DisplayFor(model => model.ListProject[i].T_WOMEYE_PROJECT_ID)" />
+                                            <button class="btn btn-warning" style="float:right;"><i class="fa fa-edit"></i></button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @*</div>*@
+
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="js/demo/datatables-demo.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            $('#dataTable').DataTable();
+        });
+
+        function myFunction() {
+            // Deklarasi variable
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("dataTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Ulangi(looping) melalui semua baris tabel, dan sembunyikan mereka yang tidak cocok dengan kueri pencarian
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        function myFunction2() {
+            // Deklarasi variable
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInputNo");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("dataTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Ulangi(looping) melalui semua baris tabel, dan sembunyikan mereka yang tidak cocok dengan kueri pencarian
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[3];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+
+            console.log(filter);
+        }
+
+        function myFunction3() {
+            // Deklarasi variable
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInputStatus");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("dataTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Ulangi(looping) melalui semua baris tabel, dan sembunyikan mereka yang tidak cocok dengan kueri pencarian
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[6];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        function myFunction4() {
+            // Deklarasi variable
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInputProg");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("dataTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Ulangi(looping) melalui semua baris tabel, dan sembunyikan mereka yang tidak cocok dengan kueri pencarian
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[6];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        function myFunction5() {
+            // Deklarasi variable
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInputFA");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("dataTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Ulangi(looping) melalui semua baris tabel, dan sembunyikan mereka yang tidak cocok dengan kueri pencarian
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[5];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+        document.getElementById("myInputStatus").onchange = function () {
+            var table = $('#dataTable').DataTable();
+
+            var value = $(this).val();
+            $('#myFilter tr').filter(function () {
+                $(this).toggle($(this).text().indexOf(value) > -1)
+            });
+
+            console.log(value);
+        }
+
+
+        document.getElementById("myInputSol").onchange = function () {
+            var table = $('#dataTable').DataTable();
+            var val = $.fn.dataTable.util.escapeRegex(
+                $(this).val()
+            );
+
+            table.column(1).search(val ? '^' + val + '$' : '', true, false).draw();
+
+            console.log(val);
+        }
+
+        document.getElementById("myInputProject").onchange = function () {
+            var table = $('#dataTable').DataTable();
+            var val = $.fn.dataTable.util.escapeRegex(
+                $(this).val()
+            );
+
+            table.column(2).search(val ? '^' + val + '$' : '', true, false).draw();
+
+            console.log(val);
+        }
+
+        document.getElementById("myInputFA").onchange = function () {
+            var table = $('#dataTable').DataTable();
+            var val = $.fn.dataTable.util.escapeRegex(
+                $(this).val()
+            );
+
+            table.column(5).search(val ? '^' + val + '$' : '', true, false).draw();
+
+            console.log(val);
+        }
+
+        document.getElementById("myInputProg").onchange = function () {
+            var table = $('#dataTable').DataTable();
+            var val = $.fn.dataTable.util.escapeRegex(
+                $(this).val()
+            );
+
+            table.column(6).search(val ? '^' + val + '$' : '', true, false).draw();
+
+            console.log(val);
+        }
+
+
+
+
+    </script>
+</body>
+</html>
+
+

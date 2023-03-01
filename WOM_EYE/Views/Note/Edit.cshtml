@@ -1,0 +1,89 @@
+﻿@model WOM_EYE.Models.Notes.NoteModel
+
+@{
+    ViewData["Title"] = "Edit Catatan";
+    ViewData["responseCode"] = Model.responseCode;
+}
+
+<!-- #region Area Response -->
+<div>
+    <div style="height:20px;width:60%;margin-left:auto">
+        @if (@Model.responseCode == "200")
+        {
+            <span class="alert-success" style="border-radius:5px; padding:3px; float:right">
+                @Model.responseMessage
+            </span>
+        }
+        else
+        {
+            if (@Model.responseCode != null && @Model.responseCode != "xx")
+            {
+                <span class="alert-danger" style="border-radius:5px; padding:3px; float:right">
+                    Update Failed : @Model.responseMessage
+                </span>
+            }
+
+        }
+    </div>
+</div>
+
+
+<h3>Edit Note @ViewBag.namaTahap</h3>
+<hr />
+<div class="row">
+    <div class="col-lg-12">
+        <form asp-action="EditValidation" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Hidden -->
+            <div class="form-group">
+                <input asp-for="M_WOMEYE_CATATAN_ID" class="form-control" type="hidden" />
+                <input asp-for="DETAIL_PROJECT_ID" class="form-control" type="hidden" />
+                <input asp-for="USR_UPD" name="USR_UPD" id="USR_UPD" type="hidden" />
+            </div>
+
+            <!-- Pembuat -->
+            <div class="form-group">
+                <label asp-for="USR_CRT" class="control-label"></label>
+                <input asp-for="USR_CRT" class="form-control" readonly style="border-radius:10rem;" />
+                <span asp-validation-for="USR_CRT" class="text-danger"></span>
+            </div>
+
+            <!-- Status -->
+            <div class="form-group">
+                <label asp-for="STATUS_ID" class="control-label"></label>
+                <select asp-for="STATUS_ID" id="STATUS_ID" name="STATUS_ID" class="form-control" style="border-radius:10rem;">
+                    <option value=""> Select Status </option>
+                    @foreach (var status in Model.ddlStatusCatatan)
+                    {
+                        <option value="@status.key">@status.value</option>
+                    }
+                </select>
+                <span asp-validation-for="STATUS_ID" class="text-danger"></span>
+            </div>
+
+            <!-- NOTES -->
+            <div class="form-group">
+                <label asp-for="NOTES" class="control-label"></label>
+                <input asp-for="NOTES" class="form-control" style="border-radius:10rem;" />
+                <span asp-validation-for="NOTES" class="text-danger"></span>
+            </div>
+
+            <!-- Button -->
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary btn-block" style="border-radius:10rem;" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+<script src="~/vendor/jquery/jquery.min.js"></script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

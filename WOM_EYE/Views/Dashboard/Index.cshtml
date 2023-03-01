@@ -1,0 +1,133 @@
+﻿@model WOM_EYE.Models.Dashboard.DashboardModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Dashboard";
+    string idLabel = "";
+    string idValue = "";
+    string condition = "";
+    int limit = 0;
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+</head>
+<h3 class="text-success" style="font-size: 10px; box-shadow: 10em;">@Model.responseMessage</h3>
+
+<h1><center>Selamat Datang, @ViewBag.MUserName</center></h1>
+<br />
+<br />
+
+
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-dark">
+                            STATUS
+                        </th>
+                        <th scope="col" class="text-dark">JUMLAH</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @for (int i = 1; i < Model.listDashboard.Count; i++)
+                    {
+                        limit = 0;
+                        if (Model.listDashboard[i].GROUP_NAME == "ASSIGN")
+                        {
+                            idLabel = "#collapseAssign";
+                            idValue = "collapseAssign";
+                            condition = "ASSIGN";
+                        }
+                        else if (Model.listDashboard[i].GROUP_NAME == "IN PROGRESS")
+                        {
+                            idLabel = "#collapseInProgress";
+                            idValue = "collapseInProgress";
+                            condition = "IN PROGRESS";
+                        }
+                        else if (Model.listDashboard[i].GROUP_NAME == "DEPLOYED")
+                        {
+                            idLabel = "#collapseDeployed";
+                            idValue = "collapseDeployed";
+                            condition = "DEPLOYED";
+                        }
+                        else if (Model.listDashboard[i].GROUP_NAME == "DROP")
+                        {
+                            idLabel = "#collapseDrop";
+                            idValue = "collapseDrop";
+                            condition = "DROP";
+                        }
+
+                        <tr>
+                            @*<td>#</td>*@
+                            <td>
+                                <a class="text-dark" data-toggle="collapse" href="@idLabel" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                    @Html.DisplayFor(model => model.listDashboard[i].GROUP_NAME)
+                                </a>
+                            </td>
+                            <td>@Html.DisplayFor(model => model.listDashboard[i].JUMLAH)</td>
+                        </tr>
+
+
+                        <tr>
+                            <td colspan="3">
+                                <div class="card card-body collapse" id="@idValue">
+                                    <div class="table-responsive">
+                                        <table style="width:100%;">
+                                            <thead style="text-align: center;">
+                                                <tr>
+                                                    <th scope="col">SOL LEADER      </th>
+                                                    <th scope="col">NO PROJECT      </th>
+                                                    <th scope="col">STATUS          </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @for (int countProject = 1; countProject < Model.listProject.Count; countProject++)
+                                                {
+                                                    @if (Model.listProject[countProject].GROUP_NAME == condition && limit < 5)
+                                                    {
+                                                        limit++;
+                                                        <tr>
+                                                            <td>@Model.listProject[countProject].SOL_LEADER</td>
+                                                            <td>@Model.listProject[countProject].NO_PROJECT</td>
+                                                            <td>@Model.listProject[countProject].STATUS</td>
+                                                        </tr>
+
+
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="vendor/jquery/jquery.min.js"></script>
+
+
+<!-- Page level plugins -->
+
+
+
+
+</html>

@@ -1,0 +1,148 @@
+﻿@model WOM_EYE.Models.AddUser.AddUserModel
+
+@{
+    ViewData["Title"] = "Create User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["responseCodeAddUser"] = Model.responseCodeAddUser;
+}
+
+<!-- #region Area Response -->
+<div>
+    <div style="height:20px;width:60%;margin-left:auto">
+        @if (@Model.responseCodeAddUser == "200")
+        {
+            <span class="alert-success" style="border-radius:5px; padding:3px; float:right">
+                @Model.responseMessageAddUser
+            </span>
+        }
+        else
+        {
+            if (@Model.responseCodeAddUser != null && @Model.responseCodeAddUser != "xx")
+            {
+                <span class="alert-danger" style="border-radius:5px; padding:3px; float:right">
+                    Update Failed : @Model.responseMessageAddUser
+                </span>
+            }
+
+        }
+    </div>
+</div>
+
+<h3>INSERT DATA PROGRESS</h3>
+
+<hr />
+<div class="row">
+    <div class="col-lg-12">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Input Hidden -->
+            <!--<div class="form-group">
+        <input asp-for="PROJECT_ID" class="form-control" type="hidden" />
+        <input asp-for="USR_CRT" class="form-control" type="hidden" />
+    </div>-->
+            <!-- Input USER_ID -->
+            <div class="form-group">
+                <label asp-for="USER_ID" class="control-label"></label>
+                <input asp-for="USER_ID" class="form-control" style="border-radius:10rem;" type="text" autofocus />
+                <span asp-validation-for="USER_ID" class="text-danger"></span>
+            </div>
+
+            <!-- Input USER_NAME -->
+            <div class="form-group">
+                <label asp-for="USER_NAME" class="control-label"></label>
+                <input asp-for="USER_NAME" class="form-control" style="border-radius:10rem;" type="text" autofocus />
+                <span asp-validation-for="USER_NAME" class="text-danger"></span>
+            </div>
+
+            <!-- Input USER_NIK_EMP -->
+            <div class="form-group">
+                <label asp-for="USER_NIK_EMP" class="control-label"></label>
+                <input asp-for="USER_NIK_EMP" class="form-control" style="border-radius:10rem;" type="text" autofocus />
+                <span asp-validation-for="USER_NIK_EMP" class="text-danger"></span>
+            </div>
+
+            <!-- Input USER_NIK_KTP -->
+            <div class="form-group">
+                <label asp-for="USER_NIK_KTP" class="control-label"></label>
+                <input asp-for="USER_NIK_KTP" class="form-control" style="border-radius:10rem;" type="text" autofocus />
+                <span asp-validation-for="USER_NIK_KTP" class="text-danger"></span>
+            </div>
+
+            <!-- Input GENDER -->
+            <div class="form-group">
+                <label asp-for="GENDER" class="control-label"></label>
+                <select asp-for="GENDER" id="GENDER" name="GENDER" class="form-control" style="border-radius:10rem;">
+                    <option value=""> Pilih Gender </option>
+                    <option value="L"> LAKI-LAKI </option>
+                    <option value="P"> PEREMPUAN </option>
+                </select>
+                <span asp-validation-for="GENDER" class="text-danger"></span>
+            </div>
+
+            <!-- Input USER_POSITION -->
+            <div class="form-group">
+                <label asp-for="USER_POSITION" class="control-label"></label>
+                <select asp-for="USER_POSITION" id="USER_POSITION" name="USER_POSITION" class="form-control" style="border-radius:10rem;">
+                    <option value=""> Pilih Posisi </option>
+                    @foreach (var posisi in Model.ddlPosition)
+                    {
+                            <option value="@posisi.key">@posisi.value</option>
+                    }
+                </select>
+                <span asp-validation-for="USER_POSITION" class="text-danger"></span>
+            </div>
+
+            <!-- Input USER_PASS -->
+            <div class="form-group">
+                <label asp-for="USER_PASS" class="control-label"></label>
+                <input asp-for="USER_PASS" class="form-control" style="border-radius:10rem;" type="text" autofocus />
+                <span asp-validation-for="USER_PASS" class="text-danger"></span>
+            </div>
+
+            <!-- Input DIVISION -->
+            <div class="form-group">
+                <label asp-for="DIVISION" class="control-label"></label>
+                @*<input asp-for="DIVISION" class="form-control" style="border-radius:10rem;" type="text" autofocus />*@
+
+
+            <select asp-for="DIVISION" id="DIVISION" name="DIVISION" class="form-control" style="border-radius:10rem;">
+                <option value=""> Pilih Division </option>
+                <option value="IT Solution 1"> IT Solution 1 </option>
+                <option value="IT Solution 2"> IT Solution 2 </option>
+            </select>
+                <span asp-validation-for="DIVISION" class="text-danger"></span>
+            </div>
+
+            <!-- Input PHONE -->
+            <div class="form-group">
+                <label asp-for="PHONE" class="control-label"></label>
+                <input asp-for="PHONE" class="form-control" style="border-radius:10rem;" type="text" autofocus />
+                <span asp-validation-for="PHONE" class="text-danger"></span>
+            </div>
+
+            <!-- Input BOD -->
+            <div class="form-group">
+                <label asp-for="BOD" class="control-label"></label>
+                <input asp-for="BOD" class="form-control" style="border-radius:10rem;" type="date" autofocus />
+                <span asp-validation-for="BOD" class="text-danger"></span>
+            </div>
+
+            <!-- Button -->
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary btn-user btn-block" style="border-radius:10rem;" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@*<div>
+    <a asp-action="Index" asp-controller="Project">Back to List</a>
+</div>*@
+
+
+<script src="~/vendor/jquery/jquery.min.js"></script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

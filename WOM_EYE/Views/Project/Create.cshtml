@@ -1,0 +1,146 @@
+﻿@model WOM_EYE.Models.Projects.ProjectModel
+
+@{
+    ViewData["Title"] = "Create New Project";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["responseCodeProject"] = Model.responseCodeProject;
+}
+
+<!-- #region Area Response -->
+<div>
+    <div style="height:20px;width:60%;margin-left:auto">
+        @if (@Model.responseCodeProject == "200")
+        {
+            <span class="alert-success" style="border-radius:5px; padding:3px; float:right">
+                @Model.responseMessageProject
+            </span>
+        }
+        else
+        {
+            if (@Model.responseCodeProject != null && @Model.responseCodeProject != "xx" && @Model.responseCodeProject == "401")
+            {
+                <span class="alert-danger" style="border-radius:5px; padding:3px; float:right">
+                    Insert Failed : @Model.responseMessageProject (@Model.errorMessageProject)
+                </span>
+            }
+
+
+        }
+    </div>
+</div>
+
+<h4> INSERT DATA PROJECT</h4>
+
+@*<h4>ProjectModel</h4>*@
+<hr />
+<div class="row">
+    <div class="col-lg-12">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input asp-for="USR_CRT" id="USR_CRT" name="USR_CRT" type="hidden" value="@ViewBag.UserId" />
+
+            <!-- Input SOL LEADER-->
+            <div class="form-group">
+                <label asp-for="SOL_LEADER" class="control-label"></label>
+                <select asp-for="SOL_LEADER" id="SOL_LEADER" name="SOL_LEADER" class="form-control" style="border-radius:10rem;">
+                    <option value=""> Select Sol Leader </option>
+                    @foreach (var user in Model.ddlUser)
+                    {
+                        if (user.role == "P001")
+                        {
+                            <option value="@user.key">@user.value</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="SOL_LEADER" class="text-danger"></span>
+            </div>
+
+            <!-- Input PROJECT_LEADER-->
+            <div class="form-group">
+                <label class="control-label">Project Owner</label>
+                <select asp-for="PROJECT_LEADER" id="PROJECT_LEADER" name="PROJECT_LEADER" class="form-control" style="border-radius:10rem;">
+                    <option value=""> Project Sol Leader </option>
+                    @foreach (var user in Model.ddlUser)
+                        if (user.role == "P004")
+                        {
+                            <option value="@user.key">@user.value</option>
+                        }
+                </select>
+                <span asp-validation-for="PROJECT_LEADER" class="text-danger"></span>
+            </div>
+
+            <!-- Input JENIS PROJECT-->
+            <div class="form-group">
+                <label class="control-label">Jenis Project</label>
+                <select asp-for="JENIS_PROJECT" id="JENIS_PROJECT" name="JENIS_PROJECT" class="form-control" style="border-radius:10rem;">
+                    <option value=""> Jenis Project </option>
+                    @foreach (var jenis in Model.ddlJenis)
+                    {
+                        <option value="@jenis.key">@jenis.value</option>
+                    }
+                </select>
+                <span asp-validation-for="JENIS_PROJECT" class="text-danger"></span>
+            </div>
+
+            <!-- Input NO_PROJECT-->
+            <div class="form-group">
+                <label asp-for="NO_PROJECT" class="control-label"></label>
+                <input asp-for="NO_PROJECT" class="form-control" placeholder="Input Deskripsi" style="border-radius:10rem;" />
+                <span asp-validation-for="NO_PROJECT" class="text-danger"></span>
+            </div>
+
+            <!-- Input DESKRIPSI-->
+            <div class="form-group">
+                <label asp-for="DESKRIPSI" class="control-label"></label>
+                <input asp-for="DESKRIPSI" class="form-control" placeholder="Input Deskripsi" style="border-radius:10rem;" />
+                <span asp-validation-for="DESKRIPSI" class="text-danger"></span>
+            </div>
+
+            <!-- Input FUNCTION_ANALYST-->
+            <div class="form-group">
+                <label asp-for="FUNCTION_ANALYST" class="control-label" style="font-weight:bold;"></label><br />
+                @foreach (var user in Model.ddlUser)
+                {
+                    if (user.role == "P002")
+                    {
+                        <input type="checkbox" name="checkFA" value="@user.key">
+                        @user.value
+                        <br />
+                    }
+                }
+                <span asp-validation-for="FUNCTION_ANALYST" class="text-danger"></span>
+            </div>
+
+            <!-- Input Programmer-->
+            <div class="form-group">
+                <label asp-for="PROGRAMMER" class="control-label" style="font-weight:bold;"></label><br />
+                @foreach (var user in Model.ddlUser)
+                {
+                    if (user.role == "P003")
+                    {
+                        <input type="checkbox" name="checkProgrammer" value="@user.key"> @user.value <br />
+                    }
+                }
+                <span asp-validation-for="PROGRAMMER" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary btn-user btn-block" style="border-radius:10rem;" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+<script src="~/vendor/jquery/jquery.min.js"></script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
